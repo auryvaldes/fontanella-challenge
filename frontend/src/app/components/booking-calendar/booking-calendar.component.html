@@ -1,0 +1,140 @@
+<!-- 
+=========================================================================
+MODULO DE FRONTEND - TEMPLATE (TAILWINDCSS V3)
+Lógica de UX y Diseño (Por Qué Tailwind):
+Elegimos Tailwind para maquetar el Fontanella-Challenge. Representa el estándar 
+moderno: utility-first, cero contexto de CSS perdido, responsive nativo, y permite 
+interfaces minimalistas tipo "Apple/Glassmorphism" como me solicitaste sin ensuciar el global.
+========================================================================= 
+-->
+
+<div class="min-h-screen bg-gray-50 flex flex-col items-center py-12 px-4 sm:px-6 lg:px-8">
+
+  <!-- Card Contenedora Principal: Sombras suaves 'premium', bordes curvos (UX Friendly) -->
+  <div class="max-w-3xl w-full bg-white rounded-2xl shadow-xl overflow-hidden">
+
+    <div class="px-8 py-6 bg-gradient-to-r from-blue-900 to-slate-800 text-white">
+      <h2 class="text-3xl font-extrabold tracking-tight">Agenda tu Cita</h2>
+      <p class="mt-2 text-blue-100 text-sm">Reserva un espacio con tu asesor legal. Nos adaptamos a tu horario local
+        dinámicamente.</p>
+    </div>
+
+    <div class="p-8">
+
+      <!-- ========================================================================= -->
+      <!-- SECCIÓN 0: INFORMACIÓN DE ABOGADOS (SELECTOR) -->
+      <!-- ========================================================================= -->
+      <div class="mb-6 border-b pb-4">
+        <label class="block text-sm font-semibold text-gray-700 mb-1">Abogado</label>
+        <select [(ngModel)]="selectedLawyerId" (change)="fetchSlots()"
+          class="mt-1 block w-full sm:w-2/3 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-lg font-medium text-gray-900 px-4 py-2 bg-gray-50 cursor-pointer">
+          <option *ngFor="let l of lawyers" [value]="l.id">
+            {{ l.nombre }} - {{ l.especialidad }} ({{ l.zona_horaria }})
+          </option>
+        </select>
+      </div>
+
+      <!-- ========================================================================= -->
+      <!-- SECCIÓN 1: SELECCIÓN DE FECHA (INPUT) -->
+      <!-- Lógica Angular: Usar doble binding '[ngModel]' para atrapar fechas al vuelo. -->
+      <!-- ========================================================================= -->
+      <div class="mb-8 flex items-center justify-between border-b pb-4">
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-1">Día de Consulta</label>
+          <input type="date" [(ngModel)]="selectedDate" (change)="fetchSlots()"
+            class="mt-1 block rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-lg font-medium text-gray-900 px-4 py-2 bg-gray-50 cursor-pointer">
+        </div>
+
+        <!-- Animación UX (Spinner) atado a flag lógico de TS: Evita frustración al esperar red -->
+        <div *ngIf="isLoading" class="flex items-center text-blue-600">
+          <svg class="animate-spin h-5 w-5 mr-2" viewBox="0 0 24 24"><!-- Mocker de Icono Spinner SVG -->
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path>
+          </svg>
+          <span class="text-sm font-medium">Buscando...</span>
+        </div>
+      </div>
+
+      <!-- ========================================================================= -->
+      <!-- SECCIÓN 2: RENDER DE ERRORES/ALERTAS GLOBALES -->
+      <!-- ========================================================================= -->
+      <div *ngIf="errorMessage" class="mb-6 bg-red-50 border-l-4 border-red-500 p-4 rounded-r-md">
+        <p class="text-red-700 font-medium">{{ errorMessage }}</p>
+      </div>
+
+      <!-- Banner Comercial amigable del POST 201 exitoso devuelto por Backend Controller -->
+      <div *ngIf="successMessage"
+        class="mb-6 bg-emerald-50 border border-emerald-200 p-6 rounded-lg text-center shadow-inner">
+        <svg class="mx-auto h-12 w-12 text-emerald-500 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+        </svg>
+        <h3 class="text-lg font-bold text-emerald-800 mb-2">¡Reserva Confirmada!</h3>
+        <p class="text-emerald-700 text-sm font-medium">{{ successMessage }}</p>
+      </div>
+
+      <!-- ========================================================================= -->
+      <!-- SECCIÓN 3: GRILLA DE SLOTS CAPTURADOS -->
+      <!-- Tailwind: Grilla tipo botones minimalistas hiperclickeables con Hovers sutiles -->
+      <!-- ========================================================================= -->
+      <div *ngIf="!isLoading && availableSlots.length > 0" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-4">
+        <button *ngFor="let slot of availableSlots" (click)="openBookingModal(slot)"
+          class="px-4 py-3 rounded-xl border-2 border-slate-200 text-slate-700 hover:border-blue-600 hover:text-blue-700 hover:bg-blue-50 transition-all font-semibold shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 active:scale-95">
+          {{ slot.display_time_client }}
+        </button>
+      </div>
+
+      <!-- Null-State UX: Mostrar cuándo es vaciado literal -->
+      <div *ngIf="!isLoading && availableSlots.length === 0 && !successMessage" class="text-center py-12">
+        <h3 class="mt-2 text-md font-medium text-gray-900">Agenda Ocupada</h3>
+        <p class="mt-1 text-sm text-gray-500">No hemos encontrado espacios libres para el día solicitado.</p>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ========================================================================= -->
+<!-- MODAL DE CHECKOUT FLOTANTE (ABSOLUTE Z-INDEX) -->
+<!-- Cortina Blur para enfoque absoluto ('Focal Point' premium UX) -->
+<!-- ========================================================================= -->
+<div *ngIf="isModalOpen"
+  class="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-60 backdrop-blur-sm p-4">
+  <div class="bg-white rounded-2xl shadow-2xl max-w-sm w-full p-6 transform transition-all scale-100 opacity-100">
+
+    <div class="flex justify-between items-center mb-5 border-b pb-3">
+      <h3 class="text-xl font-bold text-gray-900">Finalizar Reserva</h3>
+      <button (click)="closeModal()" class="text-gray-400 hover:text-gray-600 focus:outline-none">
+        <span class="text-2xl leading-none">&times;</span>
+      </button>
+    </div>
+
+    <p class="text-sm text-gray-600 mb-5">
+      Has seleccionado el bloque de las <span class="font-bold text-blue-700 bg-blue-50 px-2 py-1 rounded">{{
+        selectedSlot?.display_time_client }}</span>.
+    </p>
+
+    <!-- Entrada Selectiva bidireccional -->
+    <div class="mb-6">
+      <label class="block text-sm font-semibold text-gray-700 mb-2">Modalidad de Atención</label>
+      <select [(ngModel)]="selectedType"
+        class="block w-full rounded-md border-gray-300 py-3 pl-3 pr-10 text-base focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm bg-gray-50">
+        <option value="VIDEO">💻 Videoconferencia Online</option>
+        <option value="PRESENTIAL">🏢 Presencial en Oficinas</option>
+        <option value="PHONE">📞 Llamada Telefónica</option>
+      </select>
+    </div>
+
+    <div class="flex flex-col space-y-3">
+      <!-- Botón Transaccional Complejo Tailwind con desactivación durante isLoading -->
+      <button (click)="confirmBooking()" [disabled]="isLoading"
+        class="w-full inline-flex justify-center rounded-xl border border-transparent bg-slate-900 px-4 py-3 text-sm font-bold text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-slate-900 focus:ring-offset-2 transition disabled:opacity-50 disabled:cursor-not-allowed">
+        {{ isLoading ? 'Reservando...' : 'Confirmar Cita' }}
+      </button>
+      <button (click)="closeModal()"
+        class="w-full inline-flex justify-center rounded-xl bg-white px-4 py-3 text-sm font-semibold text-gray-700 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto transition">
+        Cancelar
+      </button>
+    </div>
+
+  </div>
+</div>
