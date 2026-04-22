@@ -32,7 +32,7 @@ describe('BookingService', () => {
       expect(lawyers).toEqual(dummyLawyers);
     });
 
-    const req = httpMock.expectOne('http://localhost:3000/api/lawyers');
+    const req = httpMock.expectOne('https://fontanella-challenge.onrender.com/api/lawyers');
     expect(req.request.method).toBe('GET');
     req.flush(dummyLawyers);
   });
@@ -47,7 +47,7 @@ describe('BookingService', () => {
       expect(res).toEqual(dummyResponse as any);
     });
 
-    const req = httpMock.expectOne(request => request.url === 'http://localhost:3000/api/availability');
+    const req = httpMock.expectOne(request => request.url === 'https://fontanella-challenge.onrender.com/api/availability');
     expect(req.request.method).toBe('GET');
     expect(req.request.params.get('lawyer_id')).toBe('1');
     expect(req.request.params.get('date')).toBe('2026-05-10');
@@ -68,7 +68,7 @@ describe('BookingService', () => {
       expect(res).toEqual(dummyResponse as any);
     });
 
-    const req = httpMock.expectOne('http://localhost:3000/api/book');
+    const req = httpMock.expectOne('https://fontanella-challenge.onrender.com/api/book');
     expect(req.request.method).toBe('POST');
     expect(req.request.body).toEqual(payload);
     req.flush(dummyResponse);

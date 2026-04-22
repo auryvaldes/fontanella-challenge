@@ -17,7 +17,7 @@ import { AvailabilityResponse, BookingRequest, BookingResponse } from '../models
 })
 export class BookingService {
   
-  private apiUrl = 'http://localhost:3000/api'; // Dirección del backend de Node.js en desarrollo.
+  private apiUrl = 'https://fontanella-challenge.onrender.com/api'; // Dirección del backend de Node.js en producción.
 
   constructor(private http: HttpClient) { } // DI: El compilador inyecta un proveedor HttpClient preparado para uso interno.
 
