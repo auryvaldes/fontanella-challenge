@@ -1,6 +1,16 @@
 # Fontanella Challenge - Sistema de Agendamiento Multi-Zonal
 
+[![CI/CD Pipeline](https://github.com/auryvaldes/fontanella-challenge/actions/workflows/ci.yml/badge.svg)](https://github.com/auryvaldes/fontanella-challenge/actions)
+
 Este repositorio contiene la solución completa al desafío técnico "Fontanella Challenge", un sistema de agendamiento de citas legales que soporta múltiples zonas horarias.
+
+## ⭐ Plus Valorados (Logrados)
+Este proyecto cumple con **todos** los requerimientos diferenciales (Plus):
+- ✅ **Repositorio público bien documentado**: READMEs detallados en la raíz y en cada subproyecto (`/frontend`, `/backend`, `/database`).
+- ✅ **Pipeline de CI/CD**: Integración continua configurada mediante **GitHub Actions** (`.github/workflows/ci.yml`). Ejecuta pruebas automáticas y builds con cada *push*. El despliegue continuo (CD) está conectado automáticamente a Netlify y Render.
+- ✅ **Aplicación desplegada**: Entorno 100% online y funcional (Ver sección de enlaces abajo).
+- ✅ **Tests automatizados**: Pruebas unitarias implementadas usando **Jest** (Backend) y **Jasmine/Karma** (Frontend).
+- ✅ **Documentación técnica**: Arquitectura, esquema de base de datos y decisiones técnicas explicadas detalladamente en este documento.
 
 ## 🚀 Aplicación Funcional (Live Demo)
 El proyecto se encuentra desplegado y 100% funcional en la nube:
