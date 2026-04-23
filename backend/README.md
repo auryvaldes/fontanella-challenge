@@ -9,6 +9,9 @@ Este es el backend del proyecto **Fontanella Challenge**, desarrollado en Node.j
 - **Luxon**: Librería para el manejo avanzado de fechas y zonas horarias (Time Zones).
 - **Jest & Supertest**: Frameworks utilizados para las pruebas unitarias y de integración.
 
+## Endpoints Documentados (API Docs)
+Para facilitar la evaluación técnica, el servidor cuenta con una interfaz HTML interactiva en la raíz. Al acceder a `http://localhost:3000/` desde tu navegador, visualizarás una lista completa de los endpoints (`GET /api/lawyers`, `GET /api/availability`, etc.) con enlaces clickeables que devuelven los ejemplos en JSON directamente desde la base de datos.
+
 ## Requisitos Previos
 - **Node.js** (v18 o superior recomendado)
 - **PostgreSQL** (asegúrate de que la base de datos esté inicializada, revisa la documentación en la carpeta `database/`)

@@ -37,6 +37,7 @@ El proyecto está dividido en tres capas principales que garantizan la escalabil
 2. **Migración a PostgreSQL:** Inicialmente planificado en Oracle, se optó por migrar a PostgreSQL debido a su excelente integración con servicios en la nube gratuitos (Neon.tech) y su manejo nativo e intuitivo de las zonas horarias, facilitando las demostraciones en vivo sin dependencias pesadas locales.
 3. **Desacoplamiento Frontend/Backend:** Permite que diferentes equipos trabajen en paralelo. Al usar servicios como Netlify y Render de manera separada, logramos escalamiento asimétrico (ej. podemos escalar el backend sin tocar el frontend).
 4. **Mejora de UX Dinámica:** Se implementó una lógica reactiva en el Frontend que, conectada a una agregación SQL en el Backend (`array_agg` de días habilitados), le muestra instantáneamente al cliente qué días de la semana atiende cada profesional (Ej: "Lunes, Miércoles"). Esto reduce drásticamente la frustración del usuario de tener que "adivinar" fechas en el calendario.
+5. **Onboarding Guiado y Estabilidad de UI:** Se añadió un Modal de Ayuda interactivo (con animaciones de atención) para guiar el flujo de usuarios nuevos. Además, se refinó el control del estado reactivo para garantizar que el "Banner de Éxito" permanezca visible tras el refresco automático de turnos luego de una reserva, dándole al usuario confianza absoluta de que su transacción fue procesada.
 
 ---
 

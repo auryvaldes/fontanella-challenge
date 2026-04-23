@@ -13,10 +13,18 @@ interfaces minimalistas tipo "Apple/Glassmorphism" como me solicitaste sin ensuc
   <!-- Card Contenedora Principal: Sombras suaves 'premium', bordes curvos (UX Friendly) -->
   <div class="max-w-3xl w-full bg-white rounded-2xl shadow-xl overflow-hidden">
 
-    <div class="px-8 py-6 bg-gradient-to-r from-blue-900 to-slate-800 text-white">
-      <h2 class="text-3xl font-extrabold tracking-tight">Agenda tu Cita</h2>
-      <p class="mt-2 text-blue-100 text-sm">Reserva un espacio con tu asesor legal. Nos adaptamos a tu horario local
-        dinámicamente.</p>
+    <div class="px-8 py-6 bg-gradient-to-r from-blue-900 to-slate-800 text-white flex justify-between items-start">
+      <div>
+        <h2 class="text-3xl font-extrabold tracking-tight">Agenda tu Cita</h2>
+        <p class="mt-2 text-blue-100 text-sm">Reserva un espacio con tu asesor legal. Nos adaptamos a tu horario local dinámicamente.</p>
+      </div>
+      <button (click)="openHelpModal()" class="relative group bg-amber-500 hover:bg-amber-400 text-white rounded-full h-12 w-12 flex items-center justify-center font-bold text-2xl transition-all shadow-[0_0_15px_rgba(245,158,11,0.5)] hover:shadow-[0_0_25px_rgba(245,158,11,0.8)] hover:scale-110 focus:outline-none animate-pulse">
+        ?
+        <!-- Cartelito de Ayuda (Tooltip CSS puro) -->
+        <span class="absolute top-14 right-0 w-max bg-gray-900 text-white text-sm font-bold px-3 py-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none shadow-xl border border-gray-700 z-50">
+          💡 Ayuda
+        </span>
+      </button>
     </div>
 
     <div class="p-8">
@@ -139,6 +147,52 @@ interfaces minimalistas tipo "Apple/Glassmorphism" como me solicitaste sin ensuc
       <button (click)="closeModal()"
         class="w-full inline-flex justify-center rounded-xl bg-white px-4 py-3 text-sm font-semibold text-gray-700 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto transition">
         Cancelar
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<!-- ========================================================================= -->
+<!-- MODAL DE AYUDA TÉCNICA (CÓMO FUNCIONA) -->
+<!-- ========================================================================= -->
+<div *ngIf="isHelpModalOpen" class="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-60 backdrop-blur-sm p-4">
+  <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-6 transform transition-all scale-100 opacity-100 max-h-[90vh] overflow-y-auto">
+
+    <div class="flex justify-between items-center mb-5 border-b pb-3">
+      <h3 class="text-xl font-bold text-gray-900">¿Cómo usar la agenda?</h3>
+      <button (click)="closeHelpModal()" class="text-gray-400 hover:text-gray-600 focus:outline-none">
+        <span class="text-2xl leading-none">&times;</span>
+      </button>
+    </div>
+
+    <div class="space-y-4 text-sm text-gray-700">
+      <p>Bienvenido al Sistema de Agendamiento. Aquí te explicamos cómo probar el flujo:</p>
+      
+      <div class="bg-blue-50 p-3 rounded-lg border border-blue-100">
+        <h4 class="font-bold text-blue-800 mb-1">1. Selecciona un Abogado</h4>
+        <p>Al elegir un profesional de la lista, el sistema te mostrará automáticamente los <strong>Días de atención</strong> en los que trabaja (ej: Lunes, Miércoles). Asegúrate de buscar fechas que caigan en esos días.</p>
+      </div>
+
+      <div class="bg-slate-50 p-3 rounded-lg border border-slate-200">
+        <h4 class="font-bold text-slate-800 mb-1">2. Elige un Día de Consulta</h4>
+        <p>Despliega el calendario y selecciona un día que coincida con los días de atención del profesional. El sistema consultará a la base de datos en tiempo real.</p>
+      </div>
+
+      <div class="bg-blue-50 p-3 rounded-lg border border-blue-100">
+        <h4 class="font-bold text-blue-800 mb-1">3. Zonas Horarias Automáticas</h4>
+        <p>No tienes que calcular horarios internacionales. El sistema procesa las fechas basándose en <strong>tu zona horaria local</strong> y las transforma dinámicamente usando UTC para que coincidan con la agenda real del abogado.</p>
+      </div>
+
+      <div class="bg-slate-50 p-3 rounded-lg border border-slate-200">
+        <h4 class="font-bold text-slate-800 mb-1">4. Confirmación y Anti-Colisión</h4>
+        <p>Haz clic en una hora disponible y confirma. Nuestra base de datos (mediante reglas transaccionales ACID) previene que dos personas puedan reservar el mismo espacio simultáneamente.</p>
+      </div>
+    </div>
+
+    <div class="mt-6 flex justify-end">
+      <button (click)="closeHelpModal()" class="w-full sm:w-auto inline-flex justify-center rounded-xl bg-slate-900 px-6 py-3 text-sm font-bold text-white shadow-sm hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-slate-900 focus:ring-offset-2 transition">
+        ¡Entendido!
       </button>
     </div>
 

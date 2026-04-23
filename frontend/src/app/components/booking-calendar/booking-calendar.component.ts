@@ -33,6 +33,7 @@ export class BookingCalendarComponent implements OnInit {
 
   // Variables de Modal de Reserva (checkout)
   isModalOpen: boolean = false; // Frena visual natural.
+  isHelpModalOpen: boolean = false; // Estado del modal de ayuda técnica.
   selectedSlot: AvailabilitySlot | null = null; // Aísla el turno a comprar en memoria.
   selectedType: 'PRESENTIAL' | 'VIDEO' | 'PHONE' = 'VIDEO'; // Por default se alienta a remota.
 
@@ -81,12 +82,14 @@ export class BookingCalendarComponent implements OnInit {
   // =========================================================================
   // DETONADOR PRINCIPAL: AL CAMBIAR DE DÍA EN CALENDARIO
   // =========================================================================
-  fetchSlots(): void {
+  fetchSlots(preserveSuccess: boolean = false): void {
     if (!this.selectedDate) return; // Guard-Clause anti clicks nulos que pudren la URL.
 
     this.isLoading = true; // Empieza ruedita interactiva FrontEnd limitando botones.
     this.errorMessage = null; // Limpia fallos antiguos al re-intentar navegación.
-    this.successMessage = null; // Limpia modales pasados de confirmación.
+    if (!preserveSuccess) {
+      this.successMessage = null; // Limpia modales pasados de confirmación si no venimos de una reserva.
+    }
 
     // Nos suscribimos a cañería asíncrona del Backend Express/Oracle.
     this.bookingService.getAvailability(this.selectedLawyerId, this.selectedDate).subscribe({
@@ -114,6 +117,14 @@ export class BookingCalendarComponent implements OnInit {
   closeModal() {
     this.isModalOpen = false; // Cerrar cortina.
     this.selectedSlot = null; // Purgar cache memory.
+  }
+
+  openHelpModal() {
+    this.isHelpModalOpen = true;
+  }
+
+  closeHelpModal() {
+    this.isHelpModalOpen = false;
   }
 
   // =========================================================================
@@ -144,7 +155,7 @@ export class BookingCalendarComponent implements OnInit {
         this.isLoading = false;
         this.closeModal(); // Chau ventana intermedia.
         this.successMessage = res.instrucciones_encuentro; // Magia UX ("Te enviamos un zoom, etc...")
-        this.fetchSlots(); // RE-CARGAR grilla de hoy para que el turno desaparezca dinámicamente frente a ojos!.
+        this.fetchSlots(true); // RE-CARGAR grilla manteniendo el success message.
       },
       error: (err) => {
         this.isLoading = false; 
