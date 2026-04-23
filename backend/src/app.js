@@ -23,11 +23,11 @@ app.get('/', (req, res) => {
             <h1>Backend de Fontanella Activo 🚀</h1>
             <p>Este es el microservicio API REST para el Challenge.</p>
             <h2>Rutas de la API (Endpoints)</h2>
-            <ul style="line-height: 1.8;">
-                <li>🟢 <b>GET /api/health</b>: Verifica el estado del servidor y conexión a PostgreSQL.</li>
-                <li>🟢 <b>GET /api/lawyers</b>: Listado de abogados, sus especialidades y días de atención activos.</li>
-                <li>🟢 <b>GET /api/availability</b>: Obtiene turnos libres. <br><i>(Ej: /api/availability?lawyer_id=1&date=2026-05-10&timezone=America/Argentina/Buenos_Aires)</i></li>
-                <li>🔵 <b>POST /api/book</b>: Checkout transaccional para registrar cita. <br><i>(Requiere Body: { lawyer_id, client_id, start_time_utc, end_time_utc, tipo })</i></li>
+            <ul style="line-height: 2;">
+                <li>🟢 <b><a href="/api/health" target="_blank" style="color: #2563eb; text-decoration: none; border-bottom: 1px dotted #2563eb;">GET /api/health</a></b>: Verifica el estado del servidor y conexión a PostgreSQL.</li>
+                <li>🟢 <b><a href="/api/lawyers" target="_blank" style="color: #2563eb; text-decoration: none; border-bottom: 1px dotted #2563eb;">GET /api/lawyers</a></b>: Listado de abogados, sus especialidades y días de atención activos.</li>
+                <li>🟢 <b><a href="/api/availability?lawyer_id=1&date=2026-05-10&timezone=America/Argentina/Buenos_Aires" target="_blank" style="color: #2563eb; text-decoration: none; border-bottom: 1px dotted #2563eb;">GET /api/availability</a></b>: Obtiene turnos libres. <br><span style="color: #4b5563; font-size: 0.9em;">(☝️ Click para ver un ejemplo de disponibilidad para el 10 de Mayo de 2026 en Buenos Aires)</span></li>
+                <li>🔵 <b style="color: #475569;">POST /api/book</b>: Checkout transaccional para registrar cita. <br><span style="color: #4b5563; font-size: 0.9em;">(Requiere Body JSON: <code>{ "lawyer_id": 1, "client_id": 1, "start_time_utc": "2026-05-10T14:00:00.000Z", "end_time_utc": "2026-05-10T14:30:00.000Z", "tipo": "VIDEO" }</code>)</span></li>
             </ul>
             <hr style="margin-top: 2rem;">
             <p>Para interactuar visualmente, <a href="https://fontanella-challenge.netlify.app/">ingresa al Frontend desplegado en Netlify</a>.</p>
