@@ -18,7 +18,21 @@ const appointmentRoutes = require('./routes/appointmentRoutes');
 app.use('/api', appointmentRoutes);
 
 app.get('/', (req, res) => {
-    res.send("<h1>Backend de Fontanella Activo 🚀</h1><p>Por favor abre el Frontend en http://localhost:4200</p>");
+    res.send(`
+        <div style="font-family: system-ui, sans-serif; max-width: 800px; margin: 0 auto; padding: 2rem;">
+            <h1>Backend de Fontanella Activo 🚀</h1>
+            <p>Este es el microservicio API REST para el Challenge.</p>
+            <h2>Rutas de la API (Endpoints)</h2>
+            <ul style="line-height: 1.8;">
+                <li>🟢 <b>GET /api/health</b>: Verifica el estado del servidor y conexión a PostgreSQL.</li>
+                <li>🟢 <b>GET /api/lawyers</b>: Listado de abogados, sus especialidades y días de atención activos.</li>
+                <li>🟢 <b>GET /api/availability</b>: Obtiene turnos libres. <br><i>(Ej: /api/availability?lawyer_id=1&date=2026-05-10&timezone=America/Argentina/Buenos_Aires)</i></li>
+                <li>🔵 <b>POST /api/book</b>: Checkout transaccional para registrar cita. <br><i>(Requiere Body: { lawyer_id, client_id, start_time_utc, end_time_utc, tipo })</i></li>
+            </ul>
+            <hr style="margin-top: 2rem;">
+            <p>Para interactuar visualmente, <a href="https://fontanella-challenge.netlify.app/">ingresa al Frontend desplegado en Netlify</a>.</p>
+        </div>
+    `);
 });
 
 app.get('/api/health', async (req, res) => {
