@@ -32,3 +32,9 @@ Este directorio contiene los scripts de inicialización, configuración y los da
 
 ## Notas Importantes
 - Las tablas hacen un fuerte uso de la característica `TIMESTAMP WITH TIME ZONE` de PostgreSQL. Asegúrate de que las inserciones del backend siempre provean o manejen coherentemente el formato UTC para evitar conflictos de agendamiento entre distintas zonas horarias.
+
+## Diagrama de Entidad-Relación (DER)
+
+A continuación se presenta el esquema relacional de la base de datos, destacando las 4 entidades principales y sus relaciones. Notar el uso estratégico de `timestamptz` en las tablas `availability_slots` y `appointments` para garantizar la compatibilidad multi-zonal global.
+
+![Diagrama Entidad-Relación - Fontanella Challenge](image.png)
