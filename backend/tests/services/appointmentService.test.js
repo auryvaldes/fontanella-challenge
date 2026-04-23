@@ -19,7 +19,7 @@ describe('appointmentService', () => {
 
             const result = await appointmentService.getLawyers();
             expect(result).toEqual(mockLawyers);
-            expect(db.getPool().query).toHaveBeenCalledWith(expect.stringContaining('SELECT id, nombre, especialidad, zona_horaria FROM lawyers'));
+            expect(db.getPool().query).toHaveBeenCalledWith(expect.stringContaining('SELECT l.id, l.nombre, l.especialidad, l.zona_horaria'));
         });
     });
 

@@ -2,14 +2,14 @@
 // COMPONENTE: BOOKING CALENDAR (LOGIC)
 // Lógica de UX (Por Qué):
 // Un componente inteligente (Smart Component). Une la UI con el cerebro de
-// datos. Reacciona a cuando un paciente elige un "Día", detona carga (Spinners)
+// datos. Reacciona a cuando un cliente elige un "Día", detona carga (Spinners)
 // para relajar la ansiedad, procesa la data y abre Modales defensivos de 
 // confirmación para que no reserven cosas "sin querer" con un click falso.
 // =========================================================================
 
 import { Component, OnInit } from '@angular/core'; // Primitivas de Angular Framework (Decorador y Lifecycle Hook).
 import { BookingService } from '../../services/booking.service'; // Conexión a la bomba de datos HTTP custom externa.
-import { AvailabilitySlot, BookingRequest } from '../../models/booking.model'; // Moldeos estrictos de los datos a fluir en memoria local.
+import { AvailabilitySlot, BookingRequest, Lawyer } from '../../models/booking.model'; // Moldeos estrictos de los datos a fluir en memoria local.
 import { CommonModule } from '@angular/common'; // Agregador nativo de utilidades *ngIf / *ngFor.
 import { FormsModule } from '@angular/forms'; // Módulo de banana-box [(ngModel)] para capturar entradas de inputs html (Datepicker/Selects).
 
@@ -37,8 +37,10 @@ export class BookingCalendarComponent implements OnInit {
   selectedType: 'PRESENTIAL' | 'VIDEO' | 'PHONE' = 'VIDEO'; // Por default se alienta a remota.
 
   // Estados de Abogado
-  lawyers: any[] = [];
+  lawyers: Lawyer[] = [];
   selectedLawyerId: number = 1; // Default a 1 o al primero
+  selectedLawyerWorkingDaysDisplay: string = '';
+  dayNames: Record<number, string> = { 1: 'Lunes', 2: 'Martes', 3: 'Miércoles', 4: 'Jueves', 5: 'Viernes', 6: 'Sábado', 7: 'Domingo' };
 
   constructor(private bookingService: BookingService) { } // DI: Recibir motor RxJs.
 
@@ -53,10 +55,27 @@ export class BookingCalendarComponent implements OnInit {
         this.lawyers = data;
         if (this.lawyers.length > 0) {
            this.selectedLawyerId = this.lawyers[0].id;
+           this.updateWorkingDaysDisplay();
         }
         this.fetchSlots(); 
       }
     });
+  }
+
+  updateWorkingDaysDisplay() {
+    const lawyer = this.lawyers.find(l => l.id == this.selectedLawyerId);
+    if (lawyer && lawyer.working_days && lawyer.working_days.length > 0) {
+      // Sort in ascending order properly
+      const days = [...lawyer.working_days].sort((a, b) => a - b).map(d => this.dayNames[d]);
+      this.selectedLawyerWorkingDaysDisplay = days.join(', ');
+    } else {
+      this.selectedLawyerWorkingDaysDisplay = 'No hay días de atención asignados';
+    }
+  }
+
+  onLawyerChange() {
+    this.updateWorkingDaysDisplay();
+    this.fetchSlots();
   }
 
   // =========================================================================

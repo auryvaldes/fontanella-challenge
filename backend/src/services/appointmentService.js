@@ -87,7 +87,14 @@ async function createAppointment(lawyer_id, client_id, start_time_utc, end_time_
 }
 
 async function getLawyers() {
-    const query = `SELECT id, nombre, especialidad, zona_horaria FROM lawyers ORDER BY id ASC`;
+    const query = `
+        SELECT l.id, l.nombre, l.especialidad, l.zona_horaria, 
+               COALESCE(array_agg(DISTINCT a.dia_semana) FILTER (WHERE a.dia_semana IS NOT NULL), '{}') as working_days
+        FROM lawyers l
+        LEFT JOIN availability_slots a ON l.id = a.lawyer_id
+        GROUP BY l.id, l.nombre, l.especialidad, l.zona_horaria
+        ORDER BY l.id ASC
+    `;
     const result = await db.getPool().query(query);
     return result.rows;
 }

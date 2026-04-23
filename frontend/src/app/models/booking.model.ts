@@ -7,6 +7,14 @@
 // empaquetar cuando hagamos un POST de reserva.
 // =========================================================================
 
+export interface Lawyer {
+  id: number;
+  nombre: string;
+  especialidad: string;
+  zona_horaria: string;
+  working_days: number[];
+}
+
 export interface AvailabilitySlot {
   slot_utc: string; // Fecha cruda universal necesaria para la transacción final.
   display_time_client: string; // Ej: "03:00 PM" renderizado para el UX local del usuario.
@@ -19,7 +27,7 @@ export interface AvailabilityResponse {
 
 export interface BookingRequest {
   lawyer_id: number; // Abogado al que le compramos el slot.
-  client_id: number; // Identificador en sesión del paciente/cliente.
+  client_id: number; // Identificador en sesión del cliente.
   start_time_utc: string; // Marca de tiempo.
   end_time_utc: string; // Marca de tiempo final teórica (ej. 30 u 60 mins extra).
   tipo: 'PRESENTIAL' | 'VIDEO' | 'PHONE'; // Enum estricto para modalidades de negocio.

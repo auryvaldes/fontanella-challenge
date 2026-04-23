@@ -36,6 +36,7 @@ El proyecto está dividido en tres capas principales que garantizan la escalabil
    - **En el Backend:** Se utilizó **Luxon** en lugar de Date puro nativo, ya que Luxon es superior manejando conversiones exactas de IANA Time Zones (ej. `America/Argentina/Buenos_Aires` a `Europe/Madrid`). La API siempre expone las disponibilidades al cliente transformadas a la zona horaria del usuario que hace la consulta.
 2. **Migración a PostgreSQL:** Inicialmente planificado en Oracle, se optó por migrar a PostgreSQL debido a su excelente integración con servicios en la nube gratuitos (Neon.tech) y su manejo nativo e intuitivo de las zonas horarias, facilitando las demostraciones en vivo sin dependencias pesadas locales.
 3. **Desacoplamiento Frontend/Backend:** Permite que diferentes equipos trabajen en paralelo. Al usar servicios como Netlify y Render de manera separada, logramos escalamiento asimétrico (ej. podemos escalar el backend sin tocar el frontend).
+4. **Mejora de UX Dinámica:** Se implementó una lógica reactiva en el Frontend que, conectada a una agregación SQL en el Backend (`array_agg` de días habilitados), le muestra instantáneamente al cliente qué días de la semana atiende cada profesional (Ej: "Lunes, Miércoles"). Esto reduce drásticamente la frustración del usuario de tener que "adivinar" fechas en el calendario.
 
 ---
 

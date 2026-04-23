@@ -26,12 +26,18 @@ interfaces minimalistas tipo "Apple/Glassmorphism" como me solicitaste sin ensuc
       <!-- ========================================================================= -->
       <div class="mb-6 border-b pb-4">
         <label class="block text-sm font-semibold text-gray-700 mb-1">Abogado</label>
-        <select [(ngModel)]="selectedLawyerId" (change)="fetchSlots()"
+        <select [(ngModel)]="selectedLawyerId" (change)="onLawyerChange()"
           class="mt-1 block w-full sm:w-2/3 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-lg font-medium text-gray-900 px-4 py-2 bg-gray-50 cursor-pointer">
           <option *ngFor="let l of lawyers" [value]="l.id">
             {{ l.nombre }} - {{ l.especialidad }} ({{ l.zona_horaria }})
           </option>
         </select>
+        <p class="mt-3 text-sm text-gray-600 flex items-center bg-blue-50 px-3 py-2 rounded-md w-max border border-blue-100">
+          <svg class="h-4 w-4 mr-2 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          </svg>
+          <span class="font-semibold text-blue-800 mr-1">Días de atención:</span> <span class="text-gray-700">{{ selectedLawyerWorkingDaysDisplay }}</span>
+        </p>
       </div>
 
       <!-- ========================================================================= -->
