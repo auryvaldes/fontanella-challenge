@@ -49,16 +49,16 @@ export class BookingCalendarComponent implements OnInit {
     // Definimos una fecha base Default (UX amigable para no ver calendario vacío primer frame).
     const today = new Date(); // Objeto fecha crudo de la pc base.
     this.selectedDate = today.toISOString().split('T')[0]; // Parsea brutalmente al standard que nuestra BD espera "yyyy-mm-dd".
-    
+
     // Primero cargamos los abogados y luego consultamos el primero por defecto.
     this.bookingService.getLawyers().subscribe({
       next: (data) => {
         this.lawyers = data;
         if (this.lawyers.length > 0) {
-           this.selectedLawyerId = this.lawyers[0].id;
-           this.updateWorkingDaysDisplay();
+          this.selectedLawyerId = this.lawyers[0].id;
+          this.updateWorkingDaysDisplay();
         }
-        this.fetchSlots(); 
+        this.fetchSlots();
       }
     });
   }
@@ -91,7 +91,7 @@ export class BookingCalendarComponent implements OnInit {
       this.successMessage = null; // Limpia modales pasados de confirmación si no venimos de una reserva.
     }
 
-    // Nos suscribimos a cañería asíncrona del Backend Express/Oracle.
+    // Nos suscribimos a cañería asíncrona del Backend Express.
     this.bookingService.getAvailability(this.selectedLawyerId, this.selectedDate).subscribe({
       next: (response) => {
         // En caso verde Restful 200..
@@ -128,38 +128,38 @@ export class BookingCalendarComponent implements OnInit {
   }
 
   // =========================================================================
-  // EVENTO FINAL: DISPARAR TRANSACCIÓN (CHECKOUT ACID ORACLE)
+  // EVENTO FINAL: DISPARAR TRANSACCIÓN
   // =========================================================================
   confirmBooking() {
     if (!this.selectedSlot) return; // Validación interna paranoica.
 
     this.isLoading = true; // Activa spinner del botón CONFIRMAR para evitar multi-clicks del ansioso y romper DB.
 
-    // Acomodar datos para matchar Modelo de Node/Oracle.
+    // Acomodar datos para matchar Modelo de Node.
     const payload: BookingRequest = {
-      lawyer_id: this.selectedLawyerId, 
-      client_id: 1, // ¡AQUÍ ESTABA EL ERROR! Cliente Dummy con ID 1 que es el único real en DB.
+      lawyer_id: this.selectedLawyerId,
+      client_id: 1,
       start_time_utc: this.selectedSlot.slot_utc, // Mandar Crudo universal.
-      
+
       // Armamos límite teório (ej: Media hora despues del start).
       // En prod, luxon sumaria 30 mins, hoy engañamos string a nivel prototipo.
-      end_time_utc: this.selectedSlot.slot_utc.replace('00.000Z', '30.000Z'), 
-      
+      end_time_utc: this.selectedSlot.slot_utc.replace('00.000Z', '30.000Z'),
+
       tipo: this.selectedType // El select del combobox "Phone" o "Video" bidireccionalizado (ngModel).
     };
 
     // Subir peticion final destructiva.
     this.bookingService.bookAppointment(payload).subscribe({
       next: (res) => {
-        // Se comiteó exitosamente la fila transaccional de Oracle.
+        // Se comiteó exitosamente la fila transaccional de.
         this.isLoading = false;
         this.closeModal(); // Chau ventana intermedia.
         this.successMessage = res.instrucciones_encuentro; // Magia UX ("Te enviamos un zoom, etc...")
         this.fetchSlots(true); // RE-CARGAR grilla manteniendo el success message.
       },
       error: (err) => {
-        this.isLoading = false; 
-        this.closeModal(); 
+        this.isLoading = false;
+        this.closeModal();
         this.errorMessage = err.message; // Transponer 409 Double-Booking a Toast de terror UX.
       }
     });
